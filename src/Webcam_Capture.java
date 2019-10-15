@@ -67,7 +67,7 @@ public class Webcam_Capture {
         	@Override
         	public void windowClosing(WindowEvent e) {
         		LabelWriter labelwriter = new LabelWriter();
-        		labelwriter.printLabel("Amico QC Checked", "White Punched Extrusion", "Line: ", "Die: ", "Production Run: ", "17", "256", "190", "Date: 10/9/19", "Time: 2:10PM", "QC Inspector: APeters", "Box 1: ", "32 Count");
+        		labelwriter.printLabel();//"Amico QC Checked", "White Punched Extrusion", "Line: ", "Die: ", "Production Run: ", "17", "256", "190", "Date: 10/9/19", "Time: 2:10PM", "QC Inspector: APeters", "Box 1: ", "32 Count");
         		// Close WebCam at end of program
         		closeWebCam(webcam);
         		// Exit program
