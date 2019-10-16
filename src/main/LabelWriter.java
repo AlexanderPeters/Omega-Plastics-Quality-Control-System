@@ -1,3 +1,5 @@
+package main;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -6,14 +8,14 @@ import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+
 import javax.print.PrintService;
 
 public class LabelWriter {
-
-	public static final String PRINTERNAME = "DYMO LabelWriter 450 Turbo";
-	PrinterJob printerJob = PrinterJob.getPrinterJob();
-	PageFormat pageFormat = printerJob.defaultPage();
-	Paper paper = new Paper();
+	private final String PRINTERNAME = "DYMO LabelWriter 450 Turbo";
+	private PrinterJob printerJob = PrinterJob.getPrinterJob();
+	private PageFormat pageFormat = printerJob.defaultPage();
+	private Paper paper = new Paper();
 
 	public void printLabel() {
 		final double widthPaper = (1.125 * 72);
@@ -31,7 +33,8 @@ public class LabelWriter {
 					printerJob.setPrintService(printService[i]);
 					printerJob.setPrintable(new Printable() {
 						@Override
-						//TODO: Pass strings printed on the label as parameters
+						// TODO: Pass strings printed on the label as parameters
+						// TODO: Parameter error checking
 						public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
 								throws PrinterException {
 							if (pageIndex < 1) {
@@ -46,8 +49,8 @@ public class LabelWriter {
 								g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 9));
 								// Names should be no longer that 11 charachters including the seperating space,
 								// Names are capitalized first and last
-								g.drawString("QC Inspector: Joe Schmoqw", 90, 10);
-								g.drawString("Operator: Jane Schmoqwert", 90, 24);
+								g.drawString("QC Inspector: Joe Schmo", 90, 10);
+								g.drawString("Operator: Jane Schmo", 90, 24);
 								// Work orders should always be 6 digits long, and there will not be more than
 								// 999 boxes per WO
 								g.drawString("WO / BoxID: 123456 / 321", 90, 38);

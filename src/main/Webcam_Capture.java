@@ -1,10 +1,9 @@
-import java.awt.BorderLayout;
+package main;
+
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,92 +12,56 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
 //TODO: Author, citations, and documentation
 public class Webcam_Capture {
-	static boolean wPressed = false;
-	static boolean ePressed = false;
-	static LabelWriter labelwriter = new LabelWriter();
+	private static boolean wPressed = false;
+	private static boolean ePressed = false;
+	private static LabelWriter labelwriter = new LabelWriter();
+	private static Webcam webcam;
 
-	// Main method
 	public static void main(String[] args) {
 		// Declarations and Instantiations
-		Webcam webcam = Webcam.getDefault();
-		JFrame frame = new JFrame();
-		JPanel contentContainerPanel = new JPanel();
-		ImagePanel imagePanel;
-		JPanel textPanel;
-		JTextField textField;
+		webcam = Webcam.getDefault();
+		ApplicationFrame applicationFrame = new ApplicationFrame(new BufferedImage(WebcamResolution.HD.getSize().width,
+				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT), "Press W to update image and E to approve image.");
 		BufferedImage image = null;
 		boolean newImage = false;
 
 		// Initialize camera
 		initWebCam(webcam);
 
-		// Frame definition
-		frame.setTitle("Basic Quality Inspection Program");
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-		// Image Panel
-		BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
-				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
-		imagePanel = new ImagePanel(blankImage);
-
-		// Text Panel
-		textPanel = new JPanel();
-		textField = new JTextField(35);
-		textField.setText("Press W to update image and E to approve image.");
-		textField.setFont(textField.getFont().deriveFont(50f));
-		textField.setHorizontalAlignment(JTextField.CENTER);
-		textField.setEditable(false);
-		textPanel.add(textField, BorderLayout.CENTER);
-
-		// Combine in Content Panel
-		contentContainerPanel.add(imagePanel, BorderLayout.NORTH);
-		contentContainerPanel.add(textPanel, BorderLayout.SOUTH);
-
-		// Add to Frame and make visible
-		frame.add(contentContainerPanel, BorderLayout.CENTER);
-		frame.setVisible(true);
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// Close WebCam at end of program
-				closeWebCam(webcam);
-				// Exit program
-				System.exit(0);
-			}
-
-		});
-
 		// Update on Key Press
 		while (true) {
 			KeyListen();
 			if (wPressed) {
 				image = captureImage(webcam);
-				contentContainerPanel.remove(imagePanel);
-				imagePanel = new ImagePanel(image);
-				contentContainerPanel.add(imagePanel, BorderLayout.NORTH);
-				contentContainerPanel.add(textPanel, BorderLayout.SOUTH);
-				contentContainerPanel.validate();
+				applicationFrame.getContentContainer().updateImagePanel(image);
 				newImage = true;
 			}
 			if (ePressed && image != null && newImage) {
 				Approved(image);
 				newImage = false;
 			}
+			
+			applicationFrame.validate();
+
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public static void exitProgram() {
+		// Close WebCam at end of program
+		closeWebCam(webcam);
+		// Exit program
+		System.exit(0);
 	}
 
 	// Init WebCam
@@ -147,20 +110,20 @@ public class Webcam_Capture {
 
 	// Image Approved
 	private static void Approved(BufferedImage image) {
-		String filePath = getPicturePath(null, null, null, null);
-		
+		String filePath = getPicturePath(null, null);
+
 		// Save a local copy of the image
 		try {
 			ImageIO.write(image, "PNG", new File(filePath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Print The Label
 		labelwriter.printLabel();
 	}
 
-	//TODO
+	// TODO
 	// Get date as a string
 	private static String getDate() {
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -168,16 +131,15 @@ public class Webcam_Capture {
 		return sdf.format(date);
 	}
 
-	//TODO
+	// TODO
 	// Get appropriate save address
-	private static String getPicturePath(String saveLocation, String lineNumber, String dieNumber,
-			String productionRun) {
+	private static String getPicturePath(String saveLocation, String workOrder) {
 		return "C:\\Users\\abp\\Desktop\\test.PNG";
 	}
-	
-	//TODO
+
+	// TODO
 	// Modify the message in the window
 	private static void modifyMessage(String newMessage) {
-		
+
 	}
 }
