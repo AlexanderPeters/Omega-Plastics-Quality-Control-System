@@ -19,8 +19,10 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void updateImage(BufferedImage image) {
+		this.remove(label);
 		icon = new ImageIcon(image);
 		label = new JLabel("", icon, JLabel.CENTER);
+		this.add(label, BorderLayout.CENTER);
 		this.validate();
 	}
 }

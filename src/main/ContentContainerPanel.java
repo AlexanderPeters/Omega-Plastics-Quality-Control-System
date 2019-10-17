@@ -19,12 +19,21 @@ public class ContentContainerPanel extends JPanel {
 	}
 
 	public void updateImagePanel(BufferedImage image) {
+		this.remove(imagePanel);
 		imagePanel.updateImage(image);
-		this.validate();
+		update();
+		
 	}
 
 	public void updateTextPanel(String text) {
+		this.remove(textPanel);
 		textPanel.updateText(text);
+		update();
+	}
+	
+	private void update() {
+		this.add(imagePanel, BorderLayout.NORTH);
+		this.add(textPanel, BorderLayout.SOUTH);
 		this.validate();
 	}
 }

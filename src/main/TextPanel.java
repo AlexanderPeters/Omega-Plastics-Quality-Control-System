@@ -18,7 +18,9 @@ public class TextPanel extends JPanel {
 	}
 
 	public void updateText(String text) {
+		this.remove(textField);
 		textField.setText(text);
+		this.add(textField, BorderLayout.CENTER);
 		this.validate();
 	}
 }

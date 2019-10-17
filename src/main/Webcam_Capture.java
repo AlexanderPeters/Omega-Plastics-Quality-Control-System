@@ -17,6 +17,9 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
 //TODO: Author, citations, and documentation
+//TODO: Settings import
+//TODO: Figure out why the contentContainer is no longer centered.
+//TODO: Make two clickable buttons instead of relying on keyboard presses.
 public class Webcam_Capture {
 	private static boolean wPressed = false;
 	private static boolean ePressed = false;
@@ -26,28 +29,34 @@ public class Webcam_Capture {
 	public static void main(String[] args) {
 		// Declarations and Instantiations
 		webcam = Webcam.getDefault();
-		ApplicationFrame applicationFrame = new ApplicationFrame(new BufferedImage(WebcamResolution.HD.getSize().width,
-				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT), "Press W to update image and E to approve image.");
 		BufferedImage image = null;
+		BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
+				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
 		boolean newImage = false;
 
 		// Initialize camera
 		initWebCam(webcam);
 
+		// Setup our Application Frame
+		ApplicationFrame applicationFrame = new ApplicationFrame(blankImage,
+				"Press W to update image and E to approve image.");
+
 		// Update on Key Press
 		while (true) {
 			KeyListen();
+			ContentContainerPanel ccp = applicationFrame.getContentContainer();
 			if (wPressed) {
 				image = captureImage(webcam);
-				applicationFrame.getContentContainer().updateImagePanel(image);
+				ccp.updateImagePanel(image);
 				newImage = true;
 			}
 			if (ePressed && image != null && newImage) {
+				ccp.updateImagePanel(blankImage);
 				Approved(image);
 				newImage = false;
 			}
-			
-			applicationFrame.validate();
+
+			applicationFrame.updateFrame(ccp);
 
 			try {
 				Thread.sleep(50);
@@ -135,11 +144,5 @@ public class Webcam_Capture {
 	// Get appropriate save address
 	private static String getPicturePath(String saveLocation, String workOrder) {
 		return "C:\\Users\\abp\\Desktop\\test.PNG";
-	}
-
-	// TODO
-	// Modify the message in the window
-	private static void modifyMessage(String newMessage) {
-
 	}
 }

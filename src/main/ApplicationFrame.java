@@ -31,4 +31,11 @@ public class ApplicationFrame extends JFrame {
 	public ContentContainerPanel getContentContainer() {
 		return contentContainerPanel;
 	}
+	
+	public void updateFrame(ContentContainerPanel ccp) {
+		this.remove(contentContainerPanel);
+		this.contentContainerPanel = ccp;
+		this.add(contentContainerPanel, BorderLayout.CENTER);
+		this.validate();
+	}
 }
