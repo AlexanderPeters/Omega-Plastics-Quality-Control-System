@@ -20,6 +20,7 @@ import com.github.sarxos.webcam.WebcamResolution;
 //TODO: Settings import
 //TODO: Figure out why the contentContainer is no longer centered.
 //TODO: Make two clickable buttons instead of relying on keyboard presses.
+// Unnecessary comment
 public class Webcam_Capture {
 	private static boolean wPressed = false;
 	private static boolean ePressed = false;
@@ -33,7 +34,7 @@ public class Webcam_Capture {
 		BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
 				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
 		boolean newImage = false;
-
+		
 		// Initialize camera
 		initWebCam(webcam);
 
