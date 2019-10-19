@@ -15,28 +15,25 @@ public class ContentContainerPanel extends JPanel implements Panel {
 	private ImagePanel imagePanel;
 	private TextPanel textPanel;
 	private ButtonPanel buttonPanel;
-	//JButton b1 = new JButton("Update Image");
-	//JButton b2 = new JButton("Approve Image");
+	// JButton b1 = new JButton("Update Image");
+	// JButton b2 = new JButton("Approve Image");
 
 	public ContentContainerPanel(BufferedImage image, String text) {
 		imagePanel = new ImagePanel(image);
-		textPanel = new TextPanel(text);		
+		textPanel = new TextPanel(text);
 		buttonPanel = new ButtonPanel();
-		
+
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		imagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(imagePanel);
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(buttonPanel);
-		
-		
 	}
 
 	public void updateImagePanel(BufferedImage image) {
 		this.remove(imagePanel);
 		imagePanel.updateImage(image);
 		update();
-		
 	}
 
 	public void updateTextPanel(String text) {
@@ -44,17 +41,20 @@ public class ContentContainerPanel extends JPanel implements Panel {
 		textPanel.updateText(text);
 		update();
 	}
-	
+
 	private void update() {
 		this.add(imagePanel);
 		this.add(buttonPanel);
 	}
-	
+
 	@Override
-	public void resizeComponents(Dimension size) {	
-	    System.out.println("Step4");
+	public void resizeComponents(Dimension size) {
+		//System.out.println("Step4");
+		this.removeAll();
 		imagePanel.resizeComponents(size);
 		textPanel.resizeComponents(size);
 		buttonPanel.resizeComponents(size);
+		this.add(imagePanel);
+		this.add(buttonPanel);
 	}
 }

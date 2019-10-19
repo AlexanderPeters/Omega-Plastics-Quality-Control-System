@@ -27,6 +27,6 @@ public class TextPanel extends JPanel implements Panel {
 	
 	@Override
 	public void resizeComponents(Dimension size) {
-	    System.out.println("Step6");
+	   // System.out.println("Step6");
 	}
 }

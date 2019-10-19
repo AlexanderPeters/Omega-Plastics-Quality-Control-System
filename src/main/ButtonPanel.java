@@ -27,7 +27,7 @@ public class ButtonPanel extends JPanel implements Panel {
 	
 	@Override
 	public void resizeComponents(Dimension size) {
-	    System.out.println("Step7");
+	    //System.out.println("Step7");
 		this.removeAll();
 		Dimension dim1 = new Dimension((int) (size.width * 0.31), (int) (size.height * 0.189));
 		b1.setPreferredSize(dim1);

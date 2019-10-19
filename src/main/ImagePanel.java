@@ -30,9 +30,10 @@ public class ImagePanel extends JPanel implements Panel {
 	
 	@Override
 	public void resizeComponents(Dimension size) {
-	    System.out.println("Step5");
+	    //System.out.println("Step5");
 		this.removeAll();
-		this.setSize((int) (size.width * 0.661), (int) (size.height * 0.681));
+		Dimension dim1 = new Dimension((int) (size.width * 0.661), (int) (size.height * 0.681));
+		this.setPreferredSize(dim1);
 		this.add(label, BorderLayout.CENTER);
 	}
 }

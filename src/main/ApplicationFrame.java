@@ -37,7 +37,7 @@ public class ApplicationFrame extends JFrame {
 		this.getRootPane().addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-			    System.out.println("Step1");
+			    //System.out.println("Step1");
 				Component c = (Component) e.getSource();
 			    Dimension newSize = c.getSize();
 			    Webcam_Capture.newFrameSize(newSize);
@@ -46,12 +46,12 @@ public class ApplicationFrame extends JFrame {
 	}
 
 	public ContentContainerPanel getContentContainer() {
-	    System.out.println("Step3");
+	    //System.out.println("Step3");
 		return contentContainerPanel;
 	}
 	
 	public void updateFrame(ContentContainerPanel ccp) {
-	    System.out.println("Step8");
+	    //System.out.println("Step8");
 		this.remove(contentContainerPanel);
 		this.contentContainerPanel = ccp;
 		this.add(contentContainerPanel);// , BorderLayout.CENTER);

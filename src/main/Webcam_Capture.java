@@ -155,7 +155,7 @@ public class Webcam_Capture {
 	}
 
 	public static void newFrameSize(Dimension size) {
-		System.out.println("Step2");
+		//System.out.println("Step2");
 		ContentContainerPanel ccp = applicationFrame.getContentContainer();
 		ccp.resizeComponents(size);
 		applicationFrame.updateFrame(ccp);
