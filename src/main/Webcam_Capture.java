@@ -20,51 +20,82 @@ import com.github.sarxos.webcam.WebcamResolution;
 //TODO: Settings import
 //TODO: Figure out why the contentContainer is no longer centered.
 //TODO: Make two clickable buttons instead of relying on keyboard presses.
-// Unnecessary comment
+//TODO: Computing the label text
+//TODO: Reading in settings
+//TODO: Finish resizing
+//TODO: Listeners for buttons
+//TODO: Error handling for connect/disconnect of camera's
+//TODO: Label data error checking
+//TODO: Critical error system exit/termination
+
 public class Webcam_Capture {
 	private static boolean wPressed = false;
 	private static boolean ePressed = false;
 	private static LabelWriter labelwriter = new LabelWriter();
 	private static Webcam webcam;
 
+	// Setup our Application Frame
+	private static BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
+			WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
+	private static ApplicationFrame applicationFrame = new ApplicationFrame(blankImage,
+			"Press W to update image and E to approve image.");
+
+	// Loop vars
+	private static ContentContainerPanel ccp = applicationFrame.getContentContainer();
+	private static BufferedImage image = null;
+	private static boolean newImage = false;
+
 	public static void main(String[] args) {
 		// Declarations and Instantiations
 		webcam = Webcam.getDefault();
-		BufferedImage image = null;
-		BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
-				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
-		boolean newImage = false;
-		
+
 		// Initialize camera
 		initWebCam(webcam);
 
-		// Setup our Application Frame
-		ApplicationFrame applicationFrame = new ApplicationFrame(blankImage,
-				"Press W to update image and E to approve image.");
+		// KeyListener, runs continuously.
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent event) {
+				boolean keyStateChangeEventOccurred = false;
+				switch (event.getID()) {
+				case KeyEvent.KEY_PRESSED:
+					if (event.getKeyCode() == KeyEvent.VK_W) {
+						if (!wPressed)
+							keyStateChangeEventOccurred = true;
+						wPressed = true;
+					}
+					if (event.getKeyCode() == KeyEvent.VK_E) {
+						if (!ePressed)
+							keyStateChangeEventOccurred = true;
+						ePressed = true;
+					}
+					break;
+				case KeyEvent.KEY_RELEASED:
+					if (event.getKeyCode() == KeyEvent.VK_W)
+						wPressed = false;
+					if (event.getKeyCode() == KeyEvent.VK_E)
+						ePressed = false;
+					break;
+				}
 
-		// Update on Key Press
-		while (true) {
-			KeyListen();
-			ContentContainerPanel ccp = applicationFrame.getContentContainer();
-			if (wPressed) {
-				image = captureImage(webcam);
-				ccp.updateImagePanel(image);
-				newImage = true;
+				// Actions that occur when a button changes.
+				if (keyStateChangeEventOccurred) {
+					ccp = applicationFrame.getContentContainer();
+					if (wPressed) {
+						image = captureImage(webcam);
+						ccp.updateImagePanel(image);
+						newImage = true;
+					}
+					if (ePressed && image != null && newImage) {
+						ccp.updateImagePanel(blankImage);
+						Approved(image);
+						newImage = false;
+					}
+					applicationFrame.updateFrame(ccp);
+				}
+				return false;
 			}
-			if (ePressed && image != null && newImage) {
-				ccp.updateImagePanel(blankImage);
-				Approved(image);
-				newImage = false;
-			}
-
-			applicationFrame.updateFrame(ccp);
-
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		});
 	}
 
 	public static void exitProgram() {
@@ -76,8 +107,8 @@ public class Webcam_Capture {
 
 	// Init WebCam
 	private static void initWebCam(Webcam webcam) {
-		Dimension[] nonStandardResolutions = new Dimension[] { WebcamResolution.PAL.getSize(),
-				WebcamResolution.HD.getSize(), new Dimension(2000, 1000), new Dimension(1000, 500) };
+		Dimension[] nonStandardResolutions = new Dimension[] { WebcamResolution.HD.getSize(),
+				new Dimension(1280, 720) };
 
 		webcam.setCustomViewSizes(nonStandardResolutions);
 		webcam.setViewSize(WebcamResolution.HD.getSize());
@@ -92,30 +123,6 @@ public class Webcam_Capture {
 	// Close WebCam
 	private static void closeWebCam(Webcam webcam) {
 		webcam.close();
-	}
-
-	// Key listener
-	private static void KeyListen() {
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent event) {
-				switch (event.getID()) {
-				case KeyEvent.KEY_PRESSED:
-					if (event.getKeyCode() == KeyEvent.VK_W)
-						Webcam_Capture.wPressed = true;
-					if (event.getKeyCode() == KeyEvent.VK_E)
-						Webcam_Capture.ePressed = true;
-					break;
-				case KeyEvent.KEY_RELEASED:
-					if (event.getKeyCode() == KeyEvent.VK_W)
-						Webcam_Capture.wPressed = false;
-					if (event.getKeyCode() == KeyEvent.VK_E)
-						Webcam_Capture.ePressed = false;
-					break;
-				}
-				return false;
-			}
-		});
 	}
 
 	// Image Approved
@@ -145,5 +152,12 @@ public class Webcam_Capture {
 	// Get appropriate save address
 	private static String getPicturePath(String saveLocation, String workOrder) {
 		return "C:\\Users\\abp\\Desktop\\test.PNG";
+	}
+
+	public static void newFrameSize(Dimension size) {
+		System.out.println("Step2");
+		ContentContainerPanel ccp = applicationFrame.getContentContainer();
+		ccp.resizeComponents(size);
+		applicationFrame.updateFrame(ccp);
 	}
 }

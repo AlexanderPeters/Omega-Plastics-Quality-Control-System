@@ -1,13 +1,14 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel implements Panel {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon icon;
 	private JLabel label;
@@ -15,6 +16,8 @@ public class ImagePanel extends JPanel {
 	public ImagePanel(BufferedImage image) {
 		icon = new ImageIcon(image);
 		label = new JLabel("", icon, JLabel.CENTER);
+		this.setSize(icon.getIconWidth(), icon.getIconHeight());
+		this.setLayout(new BorderLayout());
 		this.add(label, BorderLayout.CENTER);
 	}
 
@@ -23,6 +26,13 @@ public class ImagePanel extends JPanel {
 		icon = new ImageIcon(image);
 		label = new JLabel("", icon, JLabel.CENTER);
 		this.add(label, BorderLayout.CENTER);
-		this.validate();
+	}
+	
+	@Override
+	public void resizeComponents(Dimension size) {
+	    System.out.println("Step5");
+		this.removeAll();
+		this.setSize((int) (size.width * 0.661), (int) (size.height * 0.681));
+		this.add(label, BorderLayout.CENTER);
 	}
 }
