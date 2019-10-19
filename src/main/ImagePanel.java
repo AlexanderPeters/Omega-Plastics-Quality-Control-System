@@ -27,10 +27,9 @@ public class ImagePanel extends JPanel implements Panel {
 		label = new JLabel("", icon, JLabel.CENTER);
 		this.add(label, BorderLayout.CENTER);
 	}
-	
+
 	@Override
 	public void resizeComponents(Dimension size) {
-	    //System.out.println("Step5");
 		this.removeAll();
 		Dimension dim1 = new Dimension((int) (size.width * 0.661), (int) (size.height * 0.681));
 		this.setPreferredSize(dim1);

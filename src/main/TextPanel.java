@@ -24,9 +24,8 @@ public class TextPanel extends JPanel implements Panel {
 		textField.setText(text);
 		this.add(textField, BorderLayout.CENTER);
 	}
-	
+
 	@Override
 	public void resizeComponents(Dimension size) {
-	   // System.out.println("Step6");
 	}
 }

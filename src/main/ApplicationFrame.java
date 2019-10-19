@@ -26,7 +26,7 @@ public class ApplicationFrame extends JFrame {
 
 		// Add content container to frame and make visible
 		contentContainerPanel = new ContentContainerPanel(image, text);
-		this.add(contentContainerPanel);// , BorderLayout.CENTER);
+		this.add(contentContainerPanel);
 		this.setVisible(true);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
@@ -37,24 +37,21 @@ public class ApplicationFrame extends JFrame {
 		this.getRootPane().addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-			    //System.out.println("Step1");
 				Component c = (Component) e.getSource();
-			    Dimension newSize = c.getSize();
-			    Webcam_Capture.newFrameSize(newSize);
+				Dimension newSize = c.getSize();
+				Webcam_Capture.newFrameSize(newSize);
 			}
 		});
 	}
 
 	public ContentContainerPanel getContentContainer() {
-	    //System.out.println("Step3");
 		return contentContainerPanel;
 	}
-	
+
 	public void updateFrame(ContentContainerPanel ccp) {
-	    //System.out.println("Step8");
 		this.remove(contentContainerPanel);
 		this.contentContainerPanel = ccp;
-		this.add(contentContainerPanel);// , BorderLayout.CENTER);
+		this.add(contentContainerPanel);
 		this.validate();
 	}
 }

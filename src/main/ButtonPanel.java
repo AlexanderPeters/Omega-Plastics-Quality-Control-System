@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 
@@ -16,23 +15,21 @@ public class ButtonPanel extends JPanel implements Panel {
 		Dimension dim1 = new Dimension(600, 200);
 		b1.setPreferredSize(dim1);
 		b2.setPreferredSize(dim1);
-		
+
 		Font f1 = new Font(Font.DIALOG, Font.BOLD, 50);
 		b1.setFont(f1);
 		b2.setFont(f1);
-		//this.setLayout(new BorderLayout());
-		this.add(b1);//, BorderLayout.EAST);
-		this.add(b2);//, BorderLayout.WEST);
+		this.add(b1);
+		this.add(b2);
 	}
-	
+
 	@Override
 	public void resizeComponents(Dimension size) {
-	    //System.out.println("Step7");
 		this.removeAll();
 		Dimension dim1 = new Dimension((int) (size.width * 0.31), (int) (size.height * 0.189));
 		b1.setPreferredSize(dim1);
 		b2.setPreferredSize(dim1);
-		this.add(b1);//, BorderLayout.EAST);
-		this.add(b2);//, BorderLayout.WEST);
+		this.add(b1);
+		this.add(b2);
 	}
 }

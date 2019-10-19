@@ -1,13 +1,10 @@
 package main;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class ContentContainerPanel extends JPanel implements Panel {
@@ -15,8 +12,6 @@ public class ContentContainerPanel extends JPanel implements Panel {
 	private ImagePanel imagePanel;
 	private TextPanel textPanel;
 	private ButtonPanel buttonPanel;
-	// JButton b1 = new JButton("Update Image");
-	// JButton b2 = new JButton("Approve Image");
 
 	public ContentContainerPanel(BufferedImage image, String text) {
 		imagePanel = new ImagePanel(image);
@@ -49,7 +44,6 @@ public class ContentContainerPanel extends JPanel implements Panel {
 
 	@Override
 	public void resizeComponents(Dimension size) {
-		//System.out.println("Step4");
 		this.removeAll();
 		imagePanel.resizeComponents(size);
 		textPanel.resizeComponents(size);

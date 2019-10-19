@@ -17,12 +17,8 @@ import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
 //TODO: Author, citations, and documentation
-//TODO: Settings import
-//TODO: Figure out why the contentContainer is no longer centered.
-//TODO: Make two clickable buttons instead of relying on keyboard presses.
 //TODO: Computing the label text
 //TODO: Reading in settings
-//TODO: Finish resizing
 //TODO: Listeners for buttons
 //TODO: Error handling for connect/disconnect of camera's
 //TODO: Label data error checking
@@ -155,7 +151,7 @@ public class Webcam_Capture {
 	}
 
 	public static void newFrameSize(Dimension size) {
-		//System.out.println("Step2");
+		// System.out.println("Step2");
 		ContentContainerPanel ccp = applicationFrame.getContentContainer();
 		ccp.resizeComponents(size);
 		applicationFrame.updateFrame(ccp);
