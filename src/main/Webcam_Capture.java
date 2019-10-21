@@ -23,8 +23,9 @@ import com.github.sarxos.webcam.WebcamResolution;
 
 //TODO: Author, citations, and documentation
 //TODO: Error handling for connect/disconnect of camera's
-//TODO: System exit when an error is printed to terminal
+//TODO: System exit/popup when an error is printed to terminal
 //TODO: Building this code into a .jar file
+//TODO: Make operator names changeable with a text box
 
 public class Webcam_Capture extends HelperFunctions {
 	private static boolean previousUpdateImageButton = false;
@@ -39,7 +40,7 @@ public class Webcam_Capture extends HelperFunctions {
 
 	// Config File Location
 	private static File configFile = new File(
-			"O:\\Automation Config Files\\Quality Inspection Script Config Line 17.txt");
+			"O:\\Automation Config Files\\Quality Inspection Script Config Line 12.txt");
 
 	// Config File Data
 	private static String saveLocation;
