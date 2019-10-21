@@ -11,7 +11,7 @@ import java.awt.print.PrinterJob;
 
 import javax.print.PrintService;
 
-public class LabelWriter {
+public class LabelWriter extends HelperFunctions {
 	private final String PRINTERNAME = "DYMO LabelWriter 450 Turbo";
 	private Paper paper = new Paper();
 	private PrinterJob printerJob = PrinterJob.getPrinterJob();
@@ -39,7 +39,7 @@ public class LabelWriter {
 		}
 	}
 
-	public void printLabel() {
+	public void printLabel(String qcInspectorName, String operatorName, String workOrder, String boxID, String date) {
 		printerJob.setPrintable(new Printable() {
 			@Override
 			// TODO: Pass strings printed on the label as parameters
@@ -55,15 +55,22 @@ public class LabelWriter {
 
 					// Add Label Data
 					g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 9));
-					// Names should be no longer that 11 charachters including the seperating space,
-					// Names are capitalized first and last
-					g.drawString("QC Inspector: Joe Schmo", 90, 10);
-					g.drawString("Operator: Jane Schmo", 90, 24);
-					// Work orders should always be 6 digits long, and there will not be more than
-					// 999 boxes per WO
-					g.drawString("WO / BoxID: 123456 / 321", 90, 38);
-					// Date format "Date: dd/mm/yyyy"
-					g.drawString("Date: 10/10/2019", 90, 52);
+					String qcName = qcInspectorName;
+					String opName = operatorName;
+					if(qcName.length() > 11)
+						qcName = qcName.substring(0, 11);
+					if(opName.length() > 11)
+						opName = opName.substring(0, 11);					
+					g.drawString("QC Inspector: " + qcName, 90, 10);
+					g.drawString("Operator: " + opName, 90, 24);
+					if (workOrder.length() != 6)
+						new Exception("Work Order is not the correct length.").printStackTrace();
+					try {
+						g.drawString("WO / BoxID: " + workOrder + " / " + threeDigitBoxIDConversion(boxID), 90, 38);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					g.drawString("Date: " + date, 90, 52);
 
 					return PAGE_EXISTS;
 				} else {
