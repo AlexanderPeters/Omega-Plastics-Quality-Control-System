@@ -1,9 +1,6 @@
 package main;
 
 import java.awt.Dimension;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,22 +16,19 @@ import com.github.sarxos.webcam.WebcamResolution;
 //TODO: Author, citations, and documentation
 //TODO: Computing the label text
 //TODO: Reading in settings
-//TODO: Listeners for buttons
 //TODO: Error handling for connect/disconnect of camera's
 //TODO: Label data error checking
-//TODO: Critical error system exit/termination
 
 public class Webcam_Capture {
-	private static boolean wPressed = false;
-	private static boolean ePressed = false;
+	private static boolean previousUpdateImageButton = false;
+	private static boolean previousApproveImageButton = false;
 	private static LabelWriter labelwriter = new LabelWriter();
 	private static Webcam webcam;
 
 	// Setup our Application Frame
 	private static BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
 			WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
-	private static ApplicationFrame applicationFrame = new ApplicationFrame(blankImage,
-			"Press W to update image and E to approve image.");
+	private static ApplicationFrame applicationFrame = new ApplicationFrame(blankImage);
 
 	// Loop vars
 	private static ContentContainerPanel ccp = applicationFrame.getContentContainer();
@@ -48,50 +42,41 @@ public class Webcam_Capture {
 		// Initialize camera
 		initWebCam(webcam);
 
-		// KeyListener, runs continuously.
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			@Override
-			public boolean dispatchKeyEvent(KeyEvent event) {
-				boolean keyStateChangeEventOccurred = false;
-				switch (event.getID()) {
-				case KeyEvent.KEY_PRESSED:
-					if (event.getKeyCode() == KeyEvent.VK_W) {
-						if (!wPressed)
-							keyStateChangeEventOccurred = true;
-						wPressed = true;
-					}
-					if (event.getKeyCode() == KeyEvent.VK_E) {
-						if (!ePressed)
-							keyStateChangeEventOccurred = true;
-						ePressed = true;
-					}
-					break;
-				case KeyEvent.KEY_RELEASED:
-					if (event.getKeyCode() == KeyEvent.VK_W)
-						wPressed = false;
-					if (event.getKeyCode() == KeyEvent.VK_E)
-						ePressed = false;
-					break;
-				}
+		while (true) {
+			boolean buttonStateChanged = false;
+			boolean updateImageButton = applicationFrame.getContentContainer().getButtonPanel()
+					.updateImageButtonPressed();
+			boolean approveImageButton = applicationFrame.getContentContainer().getButtonPanel()
+					.approvedImageButtonPressed();
 
-				// Actions that occur when a button changes.
-				if (keyStateChangeEventOccurred) {
-					ccp = applicationFrame.getContentContainer();
-					if (wPressed) {
-						image = captureImage(webcam);
-						ccp.updateImagePanel(image);
-						newImage = true;
-					}
-					if (ePressed && image != null && newImage) {
-						ccp.updateImagePanel(blankImage);
-						Approved(image);
-						newImage = false;
-					}
-					applicationFrame.updateFrame(ccp);
+			if (updateImageButton)
+				if (!previousUpdateImageButton)
+					buttonStateChanged = true;
+			if (approveImageButton)
+				if (!previousApproveImageButton)
+					buttonStateChanged = true;
+
+			// Actions that occur when a button changes.
+			if (buttonStateChanged) {
+				ccp = applicationFrame.getContentContainer();
+				if (updateImageButton) {
+					image = captureImage(webcam);
+					ccp.updateImagePanel(image);
+					newImage = true;
 				}
-				return false;
+				if (approveImageButton && image != null && newImage) {
+					ccp.updateImagePanel(blankImage);
+					Approved(image);
+					newImage = false;
+				}
+				applicationFrame.updateFrame(ccp);
 			}
-		});
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void exitProgram() {

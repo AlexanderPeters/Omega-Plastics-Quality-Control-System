@@ -32,4 +32,12 @@ public class ButtonPanel extends JPanel implements Panel {
 		this.add(b1);
 		this.add(b2);
 	}
+	
+	public boolean updateImageButtonPressed() {
+		return this.b1.getModel().isPressed();
+	}
+	
+	public boolean approvedImageButtonPressed() {
+		return this.b2.getModel().isPressed();
+	}
 }

@@ -15,7 +15,7 @@ public class ApplicationFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private ContentContainerPanel contentContainerPanel;
 
-	public ApplicationFrame(BufferedImage image, String text) {
+	public ApplicationFrame(BufferedImage image) {
 		// Frame definition
 		this.setTitle("Basic Quality Inspection Program");
 		this.setSize(750, 500);
@@ -25,7 +25,7 @@ public class ApplicationFrame extends JFrame {
 		this.setLayout(new BorderLayout());
 
 		// Add content container to frame and make visible
-		contentContainerPanel = new ContentContainerPanel(image, text);
+		contentContainerPanel = new ContentContainerPanel(image);
 		this.add(contentContainerPanel);
 		this.setVisible(true);
 		this.addWindowListener(new WindowAdapter() {

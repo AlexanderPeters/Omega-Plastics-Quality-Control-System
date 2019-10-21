@@ -1,5 +1,6 @@
 package main;
 
+/*
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -29,3 +30,4 @@ public class TextPanel extends JPanel implements Panel {
 	public void resizeComponents(Dimension size) {
 	}
 }
+*/
