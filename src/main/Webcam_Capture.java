@@ -176,7 +176,8 @@ public class Webcam_Capture extends HelperFunctions {
 			e.printStackTrace();
 		}
 
-		// Print The Label
+		// Print The Label Twice
+		labelwriter.printLabel(qcInspectorName, operatorName, workOrder, currentBoxID, getDate());
 		labelwriter.printLabel(qcInspectorName, operatorName, workOrder, currentBoxID, getDate());
 
 		// Increment current box ID
@@ -189,7 +190,7 @@ public class Webcam_Capture extends HelperFunctions {
 			if (!(line.startsWith("//")))
 				if (line.substring(0, line.indexOf(":")).equals("Current Box ID"))
 					fileContent.set(lineNum, "Current Box ID: "
-							+ threeDigitBoxIDConversion(String.valueOf(Integer.parseInt(currentBoxID) + 1)));
+							+ fourDigitBoxIDConversion(String.valueOf(Integer.parseInt(currentBoxID) + 1)));
 			lineNum++;
 		}
 		configReader.close();

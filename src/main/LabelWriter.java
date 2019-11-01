@@ -66,7 +66,7 @@ public class LabelWriter extends HelperFunctions {
 					if (workOrder.length() != 6)
 						new Exception("Work Order is not the correct length.").printStackTrace();
 					try {
-						g.drawString("WO / BoxID: " + workOrder + " / " + threeDigitBoxIDConversion(boxID), 90, 38);
+						g.drawString("WO / BoxID: " + workOrder + " / " + fourDigitBoxIDConversion(boxID), 90, 38);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
