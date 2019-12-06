@@ -21,6 +21,8 @@ import javax.imageio.ImageIO;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
+import HelperFunctions;
+
 //TODO: Author, citations, and documentation
 //TODO: Error handling for connect/disconnect of camera's
 //TODO: System exit/popup when an error is printed to terminal
@@ -38,14 +40,9 @@ public class Webcam_Capture extends HelperFunctions {
 			WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
 	private static ApplicationFrame applicationFrame = new ApplicationFrame(blankImage);
 
-	// Config File Location
-	private static File configFile = new File(
-			"O:\\Automation Config Files\\Quality Inspection Script Config Line 12.txt");
-
-	// Config File Data
-	private static String saveLocation;
+	// Config Data
+	private static String saveLocation = "O:\\QA Docs\\Amico\\QA Pictures\\";
 	private static String workOrder;
-	private static String qcInspectorName;
 	private static String operatorName;
 
 	// Loop vars
@@ -54,27 +51,12 @@ public class Webcam_Capture extends HelperFunctions {
 	private static boolean newImage = false;
 
 	public static void main(String[] args) throws IOException {
-		// Read in settings
-		BufferedReader configReader = new BufferedReader(new FileReader(configFile));
-		String line;
-		while ((line = configReader.readLine()) != null) {
-			if (!(line.startsWith("//"))) {
-				String data = line.substring(line.indexOf(":") + 2);
-				switch (line.substring(0, line.indexOf(":"))) {
-				case "Save Location":
-					saveLocation = data;
-				case "Work Order":
-					workOrder = data;
-				case "QC Inspector":
-					qcInspectorName = data;
-				case "Operator":
-					operatorName = data;
-				}
-			}
-		}
-
-		configReader.close();
-
+		//TODO: Add text boxes for operator name, work order, and current boxID, make sure that if the box ID is overwritten back to previous
+		//image that that image gets rewritten on the next write cycle.
+		
+		//Deal with windows resizing needed to make buttons appear bug.
+		
+		
 		// Declarations and Instantiations
 		webcam = Webcam.getDefault();
 
@@ -115,10 +97,12 @@ public class Webcam_Capture extends HelperFunctions {
 				applicationFrame.updateFrame(ccp);
 			}
 			try {
-				Thread.sleep(50);
+				Thread.sleep(50); //TODO: Reduce sleep time to make buttons faster to click not click and hold?
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			//TODO: set previous button states?
 		}
 	}
 
@@ -177,8 +161,8 @@ public class Webcam_Capture extends HelperFunctions {
 		}
 
 		// Print The Label Twice
-		labelwriter.printLabel(qcInspectorName, operatorName, workOrder, currentBoxID, getDate());
-		labelwriter.printLabel(qcInspectorName, operatorName, workOrder, currentBoxID, getDate());
+		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
+		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
 
 		// Increment current box ID
 		Path replacePath = Paths.get(configFile.getPath());
@@ -212,7 +196,6 @@ public class Webcam_Capture extends HelperFunctions {
 	}
 
 	public static void newFrameSize(Dimension size) {
-		// System.out.println("Step2");
 		ContentContainerPanel ccp = applicationFrame.getContentContainer();
 		ccp.resizeComponents(size);
 		applicationFrame.updateFrame(ccp);

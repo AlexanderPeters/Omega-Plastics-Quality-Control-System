@@ -12,7 +12,8 @@ import java.awt.print.PrinterJob;
 import javax.print.PrintService;
 
 public class LabelWriter extends HelperFunctions {
-	private final String PRINTERNAME = "DYMO LabelWriter 450 Turbo";
+	private final String PRINTERNAME1 = "DYMO LabelWriter 450 Turbo";
+	private final String PRINTERNAME2 = "DYMO LabelWriter 450";
 	private Paper paper = new Paper();
 	private PrinterJob printerJob = PrinterJob.getPrinterJob();
 	private PageFormat pageFormat = printerJob.defaultPage();
@@ -28,7 +29,7 @@ public class LabelWriter extends HelperFunctions {
 		pageFormat.setOrientation(PageFormat.LANDSCAPE);
 
 		for (int i = 0; i < printService.length; i++) {
-			if (printService[i].getName().equals(PRINTERNAME)) {
+			if (printService[i].getName().equals(PRINTERNAME1) || printService[i].getName().equals(PRINTERNAME2)) {
 				try {
 					printerJob.setPrintService(printService[i]);
 				} catch (PrinterException e) {
@@ -39,29 +40,19 @@ public class LabelWriter extends HelperFunctions {
 		}
 	}
 
-	public void printLabel(String qcInspectorName, String operatorName, String workOrder, String boxID, String date) {
+	public void printLabel(String operatorName, String workOrder, String boxID, String date) {
 		printerJob.setPrintable(new Printable() {
 			@Override
-			// TODO: Pass strings printed on the label as parameters
-			// TODO: Parameter error checking
 			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 				if (pageIndex < 1) {
 					Graphics2D g = (Graphics2D) graphics;
 					g.translate(20, 10);
 
-					// Add Omega Check to start of label
-					g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 60));
-					g.drawString("Ω✓", -5, 48);
-
 					// Add Label Data
 					g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 9));
-					String qcName = qcInspectorName;
 					String opName = operatorName;
-					if(qcName.length() > 11)
-						qcName = qcName.substring(0, 11);
 					if(opName.length() > 11)
 						opName = opName.substring(0, 11);					
-					g.drawString("QC Inspector: " + qcName, 90, 10);
 					g.drawString("Operator: " + opName, 90, 24);
 					if (workOrder.length() != 6)
 						new Exception("Work Order is not the correct length.").printStackTrace();
