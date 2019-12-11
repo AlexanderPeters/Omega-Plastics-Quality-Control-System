@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -11,27 +12,30 @@ public class ContentContainerPanel extends JPanel implements Panel {
 	private static final long serialVersionUID = 1L;
 	private ImagePanel imagePanel;
 	private ButtonPanel buttonPanel;
+	private SettingsPanel settingsPanel;
 
 	public ContentContainerPanel(BufferedImage image) {
 		imagePanel = new ImagePanel(image);
 		buttonPanel = new ButtonPanel();
+		settingsPanel = new SettingsPanel();
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		imagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(imagePanel);
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(buttonPanel);
+		settingsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
+		this.add(settingsPanel);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 	}
 
-	public void updateImagePanel(BufferedImage image) {
-		this.remove(imagePanel);
-		imagePanel.updateImage(image);
-		update();
-	}
-
-	private void update() {
-		this.add(imagePanel);
-		this.add(buttonPanel);
+	public void updateImagePanel(BufferedImage image, Dimension programFrameSize) {
+		this.removeAll();
+		imagePanel.updateImage(image, programFrameSize);
+		addComponents();
 	}
 
 	@Override
@@ -39,11 +43,25 @@ public class ContentContainerPanel extends JPanel implements Panel {
 		this.removeAll();
 		imagePanel.resizeComponents(size);
 		buttonPanel.resizeComponents(size);
+		settingsPanel.resizeComponents(size);
+		addComponents();
+	}
+	
+	private void addComponents() {
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(imagePanel);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(buttonPanel);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
+		this.add(settingsPanel);
+		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 	}
 	
 	public ButtonPanel getButtonPanel() {
 		return this.buttonPanel;
+	}
+	
+	public SettingsPanel getSettingsPanel() {
+		return this.settingsPanel;
 	}
 }

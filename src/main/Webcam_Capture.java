@@ -2,26 +2,19 @@ package main;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
-import HelperFunctions;
+//import HelperFunctions;
 
 //TODO: Author, citations, and documentation
 //TODO: Error handling for connect/disconnect of camera's
@@ -50,7 +43,7 @@ public class Webcam_Capture extends HelperFunctions {
 	private static BufferedImage image = null;
 	private static boolean newImage = false;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		//TODO: Add text boxes for operator name, work order, and current boxID, make sure that if the box ID is overwritten back to previous
 		//image that that image gets rewritten on the next write cycle.
 		
@@ -62,14 +55,23 @@ public class Webcam_Capture extends HelperFunctions {
 
 		// Initialize camera
 		initWebCam(webcam);
+		
+		// Setup BoxID
+		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
+		settingsPanel.getCurrentBoxIDPanel().setText(fourDigitBoxIDConversion("0"));
 
 		while (true) {
+			// Update variable states
+			workOrder = settingsPanel.getWorkOrderPanel().getText();
+			operatorName = settingsPanel.getOperatorNamePanel().getText();
+			
 			boolean buttonStateChanged = false;
 			boolean updateImageButton = applicationFrame.getContentContainer().getButtonPanel()
 					.updateImageButtonPressed();
 			boolean approveImageButton = applicationFrame.getContentContainer().getButtonPanel()
 					.approvedImageButtonPressed();
 
+			// Button update GUI logic
 			if (updateImageButton)
 				if (!previousUpdateImageButton)
 					buttonStateChanged = true;
@@ -82,11 +84,11 @@ public class Webcam_Capture extends HelperFunctions {
 				ccp = applicationFrame.getContentContainer();
 				if (updateImageButton) {
 					image = captureImage(webcam);
-					ccp.updateImagePanel(image);
+					ccp.updateImagePanel(image, applicationFrame.getFrameSize());
 					newImage = true;
 				}
 				if (approveImageButton && image != null && newImage) {
-					ccp.updateImagePanel(blankImage);
+					ccp.updateImagePanel(blankImage, new Dimension(blankImage.getWidth(), blankImage.getHeight()));
 					try {
 						Approved(image);
 					} catch (Exception e) {
@@ -96,13 +98,15 @@ public class Webcam_Capture extends HelperFunctions {
 				}
 				applicationFrame.updateFrame(ccp);
 			}
+			
+			// Sleep to reduce system resource usage
 			try {
 				Thread.sleep(50); //TODO: Reduce sleep time to make buttons faster to click not click and hold?
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			//TODO: set previous button states?
+			//TODO: set previous button states
 		}
 	}
 
@@ -130,16 +134,19 @@ public class Webcam_Capture extends HelperFunctions {
 
 	// Close WebCam
 	private static void closeWebCam(Webcam webcam) {
-		webcam.close();
+		if(webcam != null)
+			webcam.close();
 	}
 
 	// Image Approved
 	private static void Approved(BufferedImage image) throws Exception {
+		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
 		// Local vars
-		BufferedReader configReader = new BufferedReader(new FileReader(configFile));
-		String line;
-		String currentBoxID = "";
+		//BufferedReader configReader = new BufferedReader(new FileReader(configFile));
+		//String line;
+		String currentBoxID = settingsPanel.getCurrentBoxIDPanel().getText();
 
+		/*
 		// Get current boxID
 		while ((line = configReader.readLine()) != null) {
 			if (!(line.startsWith("//")))
@@ -147,7 +154,8 @@ public class Webcam_Capture extends HelperFunctions {
 					currentBoxID = line.substring(line.indexOf(":") + 2);
 		}
 		configReader.close();
-
+		 */
+		
 		// Generate filePath
 		String filePath = getPicturePath(saveLocation, workOrder, currentBoxID);
 
@@ -164,6 +172,7 @@ public class Webcam_Capture extends HelperFunctions {
 		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
 		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
 
+		/*
 		// Increment current box ID
 		Path replacePath = Paths.get(configFile.getPath());
 		List<String> fileContent = new ArrayList<>(Files.readAllLines(replacePath, StandardCharsets.UTF_8));
@@ -179,7 +188,10 @@ public class Webcam_Capture extends HelperFunctions {
 		}
 		configReader.close();
 
-		Files.write(replacePath, fileContent, StandardCharsets.UTF_8);
+		Files.write(replacePath, fileContent, StandardCharsets.UTF_8);\
+		*/
+		
+		settingsPanel.getCurrentBoxIDPanel().setText(fourDigitBoxIDConversion(String.valueOf(Integer.valueOf(currentBoxID) + 1)));
 	}
 
 	// Get date as a string
@@ -193,11 +205,5 @@ public class Webcam_Capture extends HelperFunctions {
 	private static String getPicturePath(String saveLocation, String workOrder, String boxID) {
 		return saveLocation + "\\Work Order_" + workOrder + "\\" + getDate().replaceAll("/", "_") + "\\BoxID_" + boxID
 				+ ".PNG";
-	}
-
-	public static void newFrameSize(Dimension size) {
-		ContentContainerPanel ccp = applicationFrame.getContentContainer();
-		ccp.resizeComponents(size);
-		applicationFrame.updateFrame(ccp);
 	}
 }
