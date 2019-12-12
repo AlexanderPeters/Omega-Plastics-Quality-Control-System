@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -21,15 +20,11 @@ public class ContentContainerPanel extends JPanel implements Panel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		imagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(imagePanel);
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(buttonPanel);
 		settingsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(settingsPanel);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 	}
 
 	public void updateImagePanel(BufferedImage image, Dimension programFrameSize) {
@@ -46,21 +41,17 @@ public class ContentContainerPanel extends JPanel implements Panel {
 		settingsPanel.resizeComponents(size);
 		addComponents();
 	}
-	
+
 	private void addComponents() {
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(imagePanel);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(buttonPanel);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 		this.add(settingsPanel);
-		//this.add(Box.createRigidArea(new Dimension(0, 5)));
 	}
-	
+
 	public ButtonPanel getButtonPanel() {
 		return this.buttonPanel;
 	}
-	
+
 	public SettingsPanel getSettingsPanel() {
 		return this.settingsPanel;
 	}

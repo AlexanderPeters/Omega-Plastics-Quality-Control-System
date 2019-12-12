@@ -49,19 +49,19 @@ public class LabelWriter extends HelperFunctions {
 					g.translate(20, 10);
 
 					// Add Label Data
-					g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 9));
+					g.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 					String opName = operatorName;
-					if(opName.length() > 11)
-						opName = opName.substring(0, 11);					
-					g.drawString("Operator: " + opName, 90, 24);
+					if (opName.length() > 11)
+						opName = opName.substring(0, 11);
+					g.drawString("Operator: " + opName, 0, 17);
 					if (workOrder.length() != 6)
 						new Exception("Work Order is not the correct length.").printStackTrace();
 					try {
-						g.drawString("WO / BoxID: " + workOrder + " / " + fourDigitBoxIDConversion(boxID), 90, 38);
+						g.drawString("WO / BoxID: " + workOrder + " / " + boxID, 0, 34);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					g.drawString("Date: " + date, 90, 52);
+					g.drawString("Date: " + date, 0, 51);
 
 					return PAGE_EXISTS;
 				} else {

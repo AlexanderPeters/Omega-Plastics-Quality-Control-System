@@ -1,6 +1,5 @@
 package main;
 
-
 public class HelperFunctions {
 	public static String fourDigitBoxIDConversion(String boxID) throws Exception {
 		if (Integer.parseInt(boxID) > 9999)

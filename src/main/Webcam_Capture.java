@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
@@ -44,18 +43,18 @@ public class Webcam_Capture extends HelperFunctions {
 	private static boolean newImage = false;
 
 	public static void main(String[] args) throws Exception {
-		//TODO: Add text boxes for operator name, work order, and current boxID, make sure that if the box ID is overwritten back to previous
-		//image that that image gets rewritten on the next write cycle.
-		
-		//Deal with windows resizing needed to make buttons appear bug.
-		
-		
+		// TODO: Add text boxes for operator name, work order, and current boxID, make
+		// sure that if the box ID is overwritten back to previous
+		// image that that image gets rewritten on the next write cycle.
+
+		// Deal with windows resizing needed to make buttons appear bug.
+
 		// Declarations and Instantiations
 		webcam = Webcam.getDefault();
 
 		// Initialize camera
 		initWebCam(webcam);
-		
+
 		// Setup BoxID
 		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
 		settingsPanel.getCurrentBoxIDPanel().setText(fourDigitBoxIDConversion("0"));
@@ -64,7 +63,7 @@ public class Webcam_Capture extends HelperFunctions {
 			// Update variable states
 			workOrder = settingsPanel.getWorkOrderPanel().getText();
 			operatorName = settingsPanel.getOperatorNamePanel().getText();
-			
+
 			boolean buttonStateChanged = false;
 			boolean updateImageButton = applicationFrame.getContentContainer().getButtonPanel()
 					.updateImageButtonPressed();
@@ -98,15 +97,15 @@ public class Webcam_Capture extends HelperFunctions {
 				}
 				applicationFrame.updateFrame(ccp);
 			}
-			
+
 			// Sleep to reduce system resource usage
 			try {
-				Thread.sleep(50); //TODO: Reduce sleep time to make buttons faster to click not click and hold?
+				Thread.sleep(50); // TODO: Reduce sleep time to make buttons faster to click not click and hold?
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			//TODO: set previous button states
+
+			// TODO: set previous button states
 		}
 	}
 
@@ -134,7 +133,7 @@ public class Webcam_Capture extends HelperFunctions {
 
 	// Close WebCam
 	private static void closeWebCam(Webcam webcam) {
-		if(webcam != null)
+		if (webcam != null)
 			webcam.close();
 	}
 
@@ -142,20 +141,8 @@ public class Webcam_Capture extends HelperFunctions {
 	private static void Approved(BufferedImage image) throws Exception {
 		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
 		// Local vars
-		//BufferedReader configReader = new BufferedReader(new FileReader(configFile));
-		//String line;
-		String currentBoxID = settingsPanel.getCurrentBoxIDPanel().getText();
+		String currentBoxID = fourDigitBoxIDConversion(settingsPanel.getCurrentBoxIDPanel().getText());
 
-		/*
-		// Get current boxID
-		while ((line = configReader.readLine()) != null) {
-			if (!(line.startsWith("//")))
-				if (line.substring(0, line.indexOf(":")).equals("Current Box ID"))
-					currentBoxID = line.substring(line.indexOf(":") + 2);
-		}
-		configReader.close();
-		 */
-		
 		// Generate filePath
 		String filePath = getPicturePath(saveLocation, workOrder, currentBoxID);
 
@@ -172,26 +159,9 @@ public class Webcam_Capture extends HelperFunctions {
 		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
 		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
 
-		/*
-		// Increment current box ID
-		Path replacePath = Paths.get(configFile.getPath());
-		List<String> fileContent = new ArrayList<>(Files.readAllLines(replacePath, StandardCharsets.UTF_8));
-
-		int lineNum = 0;
-		configReader = new BufferedReader(new FileReader(configFile));
-		while ((line = configReader.readLine()) != null) {
-			if (!(line.startsWith("//")))
-				if (line.substring(0, line.indexOf(":")).equals("Current Box ID"))
-					fileContent.set(lineNum, "Current Box ID: "
-							+ fourDigitBoxIDConversion(String.valueOf(Integer.parseInt(currentBoxID) + 1)));
-			lineNum++;
-		}
-		configReader.close();
-
-		Files.write(replacePath, fileContent, StandardCharsets.UTF_8);\
-		*/
-		
-		settingsPanel.getCurrentBoxIDPanel().setText(fourDigitBoxIDConversion(String.valueOf(Integer.valueOf(currentBoxID) + 1)));
+		// Increment Box ID
+		settingsPanel.getCurrentBoxIDPanel()
+				.setText(fourDigitBoxIDConversion(String.valueOf(Integer.valueOf(currentBoxID) + 1)));
 	}
 
 	// Get date as a string

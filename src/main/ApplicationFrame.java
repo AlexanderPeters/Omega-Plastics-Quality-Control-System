@@ -1,9 +1,7 @@
 package main;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -17,10 +15,10 @@ public class ApplicationFrame extends JFrame {
 	private ContentContainerPanel contentContainerPanel;
 	// Frame dimensions
 	private Dimension oldFrameSize = new Dimension();
-	
+
 	public ApplicationFrame(BufferedImage image) {
 		// Frame definition
-		this.setTitle("Basic Quality Inspection Program");		
+		this.setTitle("Basic Quality Inspection Program");
 		this.setSize(750, 500);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setLayout(new BorderLayout());
@@ -46,10 +44,10 @@ public class ApplicationFrame extends JFrame {
 	public ContentContainerPanel getContentContainer() {
 		return contentContainerPanel;
 	}
-	
+
 	private void resizeFrame() {
-		Dimension newSize =  this.getSize();
-		if((newSize.width != oldFrameSize.width) || (newSize.height != oldFrameSize.height)) {
+		Dimension newSize = this.getSize();
+		if ((newSize.width != oldFrameSize.width) || (newSize.height != oldFrameSize.height)) {
 			this.remove(contentContainerPanel);
 			contentContainerPanel.resizeComponents(newSize);
 			this.add(contentContainerPanel);
@@ -64,7 +62,7 @@ public class ApplicationFrame extends JFrame {
 		this.add(contentContainerPanel);
 		this.validate();
 	}
-	
+
 	public Dimension getFrameSize() {
 		return this.getSize();
 	}

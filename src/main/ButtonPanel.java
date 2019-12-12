@@ -32,7 +32,7 @@ public class ButtonPanel extends JPanel implements Panel {
 	public void resizeComponents(Dimension size) {
 		this.removeAll();
 		Dimension newSize = new Dimension((int) (size.width / 2.0 * 0.5), (int) (size.height * 0.1));
-		Font f1 = new Font(Font.DIALOG, Font.BOLD, (int) (36 * (double) size.height/1056));
+		Font f1 = new Font(Font.DIALOG, Font.BOLD, (int) (36 * (double) size.height / 1056));
 		b1.setFont(f1);
 		b2.setFont(f1);
 		b1.setPreferredSize(newSize);
@@ -40,11 +40,11 @@ public class ButtonPanel extends JPanel implements Panel {
 		this.add(b1);
 		this.add(b2);
 	}
-	
+
 	public boolean updateImageButtonPressed() {
 		return this.b1.getModel().isPressed();
 	}
-	
+
 	public boolean approvedImageButtonPressed() {
 		return this.b2.getModel().isPressed();
 	}
