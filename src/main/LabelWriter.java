@@ -40,7 +40,7 @@ public class LabelWriter extends HelperFunctions {
 		}
 	}
 
-	public void printLabel(String operatorName, String workOrder, String boxID, String date) {
+	public void printLabel(String operatorName, String workOrder, String boxID, String date, int copies) {
 		printerJob.setPrintable(new Printable() {
 			@Override
 			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
@@ -71,6 +71,7 @@ public class LabelWriter extends HelperFunctions {
 		}, pageFormat); // The 2nd param is necessary for printing into a label width a right landscape
 						// format.
 		try {
+			printerJob.setCopies(copies);
 			printerJob.print();
 		} catch (PrinterException e) {
 			e.printStackTrace();

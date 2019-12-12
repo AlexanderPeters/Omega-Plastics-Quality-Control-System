@@ -156,8 +156,7 @@ public class Webcam_Capture extends HelperFunctions {
 		}
 
 		// Print The Label Twice
-		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
-		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate());
+		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate(), 2);
 
 		// Increment Box ID
 		settingsPanel.getCurrentBoxIDPanel()
