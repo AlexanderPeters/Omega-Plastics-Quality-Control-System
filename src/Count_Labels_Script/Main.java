@@ -1,3 +1,5 @@
+package Count_Labels_Script;
+
 public class Main {
 	public static void main(String[] args) {
 		ApplicationFrame applicationFrame = new ApplicationFrame();
@@ -21,5 +23,4 @@ public class Main {
 			}
 		}
 	}
-	// TODO: Add button debouncing
 }

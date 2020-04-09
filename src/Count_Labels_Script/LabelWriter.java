@@ -1,3 +1,5 @@
+package Count_Labels_Script;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -65,10 +67,8 @@ public class LabelWriter {
 		}, pageFormat); // The 2nd param is necessary for printing into a label width a right landscape
 						// format.
 		try {
-			//for (int i = 0; i < Integer.valueOf(quantity); i++) {
-				printerJob.setCopies(Integer.valueOf(quantity));
-				printerJob.print();
-			//}
+			printerJob.setCopies(Integer.valueOf(quantity));
+			printerJob.print();
 		} catch (PrinterException e) {
 			e.printStackTrace();
 		}

@@ -1,3 +1,4 @@
+package Count_Labels_Script;
 import java.awt.Component;
 
 import javax.swing.BoxLayout;
