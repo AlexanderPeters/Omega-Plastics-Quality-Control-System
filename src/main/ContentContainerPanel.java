@@ -13,8 +13,8 @@ public class ContentContainerPanel extends JPanel implements Panel {
 	private ButtonPanel buttonPanel;
 	private SettingsPanel settingsPanel;
 
-	public ContentContainerPanel(BufferedImage image) {
-		imagePanel = new ImagePanel(image);
+	public ContentContainerPanel(Dimension scalingSize) {
+		imagePanel = new ImagePanel(scalingSize);
 		buttonPanel = new ButtonPanel();
 		settingsPanel = new SettingsPanel();
 
@@ -27,32 +27,29 @@ public class ContentContainerPanel extends JPanel implements Panel {
 		this.add(settingsPanel);
 	}
 
+	/*
 	public void updateImagePanel(BufferedImage image, Dimension programFrameSize) {
-		this.removeAll();
-		imagePanel.updateImage(image, programFrameSize);
-		addComponents();
-	}
+		if(image != null)
+			imagePanel.updateImage(image);
+		this.validate();
+	}*/
 
 	@Override
 	public void resizeComponents(Dimension size) {
-		this.removeAll();
 		imagePanel.resizeComponents(size);
 		buttonPanel.resizeComponents(size);
 		settingsPanel.resizeComponents(size);
-		addComponents();
 	}
-
-	private void addComponents() {
-		this.add(imagePanel);
-		this.add(buttonPanel);
-		this.add(settingsPanel);
+	
+	public ImagePanel getImagePanel() {
+		return imagePanel;
 	}
 
 	public ButtonPanel getButtonPanel() {
-		return this.buttonPanel;
+		return buttonPanel;
 	}
 
 	public SettingsPanel getSettingsPanel() {
-		return this.settingsPanel;
+		return settingsPanel;
 	}
 }

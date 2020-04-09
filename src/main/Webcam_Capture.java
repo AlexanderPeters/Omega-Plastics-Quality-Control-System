@@ -13,166 +13,172 @@ import javax.imageio.ImageIO;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamResolution;
 
-//import HelperFunctions;
-
-//TODO: Author, citations, and documentation
-//TODO: Error handling for connect/disconnect of camera's
-//TODO: System exit/popup when an error is printed to terminal
-//TODO: Building this code into a .jar file
-//TODO: Make operator names changeable with a text box
-
 public class Webcam_Capture extends HelperFunctions {
-	private static boolean previousUpdateImageButton = false;
-	private static boolean previousApproveImageButton = false;
-	private static LabelWriter labelwriter = new LabelWriter();
-	private static Webcam webcam;
+	private LabelWriter labelwriter = new LabelWriter();
+	public Webcam webcam = null;
 
-	// Setup our Application Frame
-	private static BufferedImage blankImage = new BufferedImage(WebcamResolution.HD.getSize().width,
+	// Our default image
+	private BufferedImage image = new BufferedImage(WebcamResolution.HD.getSize().width,
 			WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT);
-	private static ApplicationFrame applicationFrame = new ApplicationFrame(blankImage);
 
-	// Config Data
-	private static String saveLocation = "O:\\QA Docs\\Amico\\QA Pictures\\";
-	private static String workOrder;
-	private static String operatorName;
+	// Configure Data
+	private final String productionLocation = "O:\\QA Docs\\Amico\\QA Pictures\\";
+	private final String developmentLocation = "O:Automation Config Files\\QA Pictures\\developmentTesting";
+	private final boolean productionNotDeveloping = false;
+	private final String saveLocation = productionNotDeveloping ? productionLocation : developmentLocation;
+	private String workOrder;
+	private String operatorName;
+	private String currentBoxID;
+	private ContentContainerPanel ccp = Main.applicationFrame.getContentContainer();
+	private SettingsPanel settingsPanel = ccp.getSettingsPanel();
+	
+	private Thread WebcamThread;
+	private Thread UIThread;
 
-	// Loop vars
-	private static ContentContainerPanel ccp = applicationFrame.getContentContainer();
-	private static BufferedImage image = null;
-	private static boolean newImage = false;
-
-	public static void main(String[] args) throws Exception {
-		// TODO: Add text boxes for operator name, work order, and current boxID, make
-		// sure that if the box ID is overwritten back to previous
-		// image that that image gets rewritten on the next write cycle.
-
-		// Deal with windows resizing needed to make buttons appear bug.
-
-		// Declarations and Instantiations
-		webcam = Webcam.getDefault();
-
+	public Webcam_Capture() throws Exception {
 		// Initialize camera
-		initWebCam(webcam);
+		try {
+			Dimension[] nonStandardResolutions = new Dimension[] { WebcamResolution.HD.getSize(),
+					new Dimension(1280, 720) };
 
-		// Setup BoxID
-		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
-		settingsPanel.getCurrentBoxIDPanel().setText(fourDigitBoxIDConversion("0"));
+			webcam = Webcam.getDefault();
+			webcam.setCustomViewSizes(nonStandardResolutions);
+			webcam.setViewSize(WebcamResolution.HD.getSize());
+			webcam.open();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
 
-		while (true) {
-			// Update variable states
-			workOrder = settingsPanel.getWorkOrderPanel().getText();
-			operatorName = settingsPanel.getOperatorNamePanel().getText();
-
-			boolean buttonStateChanged = false;
-			boolean updateImageButton = applicationFrame.getContentContainer().getButtonPanel()
-					.updateImageButtonPressed();
-			boolean approveImageButton = applicationFrame.getContentContainer().getButtonPanel()
-					.approvedImageButtonPressed();
-
-			// Button update GUI logic
-			if (updateImageButton)
-				if (!previousUpdateImageButton)
-					buttonStateChanged = true;
-			if (approveImageButton)
-				if (!previousApproveImageButton)
-					buttonStateChanged = true;
-
-			// Actions that occur when a button changes.
-			if (buttonStateChanged) {
-				ccp = applicationFrame.getContentContainer();
-				if (updateImageButton) {
-					image = captureImage(webcam);
-					ccp.updateImagePanel(image, applicationFrame.getFrameSize());
-					newImage = true;
-				}
-				if (approveImageButton && image != null && newImage) {
-					ccp.updateImagePanel(blankImage, new Dimension(blankImage.getWidth(), blankImage.getHeight()));
-					try {
-						Approved(image);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					newImage = false;
-				}
-				applicationFrame.updateFrame(ccp);
+		settingsPanel.getCurrentBoxIDPanel().setText("0");
+		
+		// Image server thread
+	/*	WebcamThread = new Thread(() -> {
+			int i = 0;
+			while(true) {
+				setImage(webcam.getImage());
+				i++;
+				System.out.println(i);
 			}
-
-			// Sleep to reduce system resource usage
-			try {
-				Thread.sleep(50); // TODO: Reduce sleep time to make buttons faster to click not click and hold?
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		});
+		WebcamThread.start();
+*/
+		// UI updating thread
+		UIThread = new Thread(() -> {
+			//int i = 0;
+			while(true) {
+				ccp = Main.applicationFrame.getContentContainer();
+				settingsPanel = ccp.getSettingsPanel();
+				workOrder = settingsPanel.getWorkOrderPanel().getText();
+				operatorName = settingsPanel.getOperatorNamePanel().getText();
+				currentBoxID = settingsPanel.getCurrentBoxIDPanel().getText();
+				
+				//setImage(webcam.getImage());
+				
+				BufferedImage im;
+				if((im = webcam.getImage()) != null) {
+					ccp.getImagePanel().setImage(im);//getImage());
+					Main.applicationFrame.setContentPane(ccp);
+					//i++;
+					//System.out.println(i);
+				}
 			}
-
-			// TODO: set previous button states
+		});
+		UIThread.start();
+	}
+	
+	private void setImage(BufferedImage image) {
+		synchronized(this) {
+			this.image = image;
+		}
+	}
+	
+	private BufferedImage getImage() {
+		synchronized(this) {
+			return this.image;
 		}
 	}
 
-	public static void exitProgram() {
+	public void closeWebcam() {
 		// Close WebCam at end of program
-		closeWebCam(webcam);
-		// Exit program
-		System.exit(0);
-	}
-
-	// Init WebCam
-	private static void initWebCam(Webcam webcam) {
-		Dimension[] nonStandardResolutions = new Dimension[] { WebcamResolution.HD.getSize(),
-				new Dimension(1280, 720) };
-
-		webcam.setCustomViewSizes(nonStandardResolutions);
-		webcam.setViewSize(WebcamResolution.HD.getSize());
-		webcam.open();
-	}
-
-	// Capture Images
-	private static BufferedImage captureImage(Webcam webcam) {
-		return webcam.getImage();
-	}
-
-	// Close WebCam
-	private static void closeWebCam(Webcam webcam) {
 		if (webcam != null)
 			webcam.close();
 	}
+	
+	public void closeThreads() {
+		//WebcamThread.stop();
+		UIThread.stop();
+	}
 
 	// Image Approved
-	private static void Approved(BufferedImage image) throws Exception {
-		SettingsPanel settingsPanel = applicationFrame.getContentContainer().getSettingsPanel();
-		// Local vars
-		String currentBoxID = fourDigitBoxIDConversion(settingsPanel.getCurrentBoxIDPanel().getText());
+	public void Approved() {
+		// string.matches("-?\\d+(\\.\\d+)?") checks if a string is numeric
+		// string.matches("^[a-zA-Z]*$") checks if a string is only alphabetic
+		// characters
+		boolean dataFormattedCorrectly = true;
 
-		// Generate filePath
-		String filePath = getPicturePath(saveLocation, workOrder, currentBoxID);
-
-		// Save a local copy of the image
-		try {
-			File file = new File(filePath);
-			file.getParentFile().mkdirs();
-			ImageIO.write(image, "PNG", file);
-		} catch (IOException e) {
-			e.printStackTrace();
+		// Check and format operator name
+		if (operatorName.equals(null) || operatorName.isEmpty() || !operatorName.matches("^[a-zA-Z]*$")) {
+			new ErrorFrame("The Operator Name was not formatted correctly.");
+			dataFormattedCorrectly = false;
+		} else {
+			if (operatorName.length() > 11)
+				operatorName = operatorName.substring(0, 11);
 		}
 
-		// Print The Label Twice
-		labelwriter.printLabel(operatorName, workOrder, currentBoxID, getDate(), 2);
+		// Check and format work order
+		if (workOrder.equals(null) || workOrder.length() != 6 || !workOrder.matches("-?\\d+(\\.\\d+)?")) {
+			new ErrorFrame("The Work Order was not formatted correctly.");
+			dataFormattedCorrectly = false;
+		}
 
-		// Increment Box ID
-		settingsPanel.getCurrentBoxIDPanel()
-				.setText(fourDigitBoxIDConversion(String.valueOf(Integer.valueOf(currentBoxID) + 1)));
+		// Check and format boxID
+		String boxIDConverted = null;
+		if (currentBoxID.equals(null) || currentBoxID.isEmpty() || !currentBoxID.matches("-?\\d+(\\.\\d+)?"))
+			dataFormattedCorrectly = false;
+		else {
+			boxIDConverted = fourDigitBoxIDConversion(currentBoxID);
+			if (boxIDConverted.equals(null) || boxIDConverted.isEmpty() || !boxIDConverted.matches("-?\\d+(\\.\\d+)?"))
+				dataFormattedCorrectly = false;
+		}
+
+		// If the data is formatted correctly print the labels
+		if (dataFormattedCorrectly) {
+			// Generate filePath
+			String filePath = getPicturePath(saveLocation, operatorName, workOrder, boxIDConverted);
+
+			// Save a local copy of the image
+			try {
+				File file = new File(filePath);
+				file.getParentFile().mkdirs();
+				ImageIO.write(image, "PNG", file);
+			} catch (IOException e) {
+				new ErrorFrame(e.getMessage());
+			}
+
+			// Print The Label Twice
+			labelwriter.printLabel(operatorName, workOrder, boxIDConverted, getDate(), 2);
+
+			// Increment Box ID
+			String newBoxID = String.valueOf(Integer.valueOf(boxIDConverted) + 1);
+			if (newBoxID.equals(null) || newBoxID.isEmpty() || !newBoxID.matches("-?\\d+(\\.\\d+)?")) {
+				new ErrorFrame("Incorrect BoxID Format, Please Re-input the Current BoxID.");
+				settingsPanel.getCurrentBoxIDPanel().setText("");
+			} else
+				settingsPanel.getCurrentBoxIDPanel().setText(newBoxID);
+		}
 	}
 
 	// Get date as a string
-	private static String getDate() {
+	private String getDate() {
 		DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		Date date = new Date();
 		return sdf.format(date);
 	}
 
 	// Get appropriate save address
-	private static String getPicturePath(String saveLocation, String workOrder, String boxID) {
+	private String getPicturePath(String saveLocation, String operatorName, String workOrder, String boxID) {
 		return saveLocation + "\\Work Order_" + workOrder + "\\" + getDate().replaceAll("/", "_") + "\\BoxID_" + boxID
-				+ ".PNG";
+				+ "_" + operatorName.toUpperCase() + ".PNG";
 	}
 }

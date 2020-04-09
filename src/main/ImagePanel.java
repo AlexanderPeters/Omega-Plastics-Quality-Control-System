@@ -2,45 +2,49 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.github.sarxos.webcam.WebcamResolution;
+
+// This is an extension of the parent class Panel which 
+// displays images.
 public class ImagePanel extends JPanel implements Panel {
 	private static final long serialVersionUID = 1L;
 	private ImageIcon icon;
 	private JLabel label;
-
-	public ImagePanel(BufferedImage image) {
-		icon = new ImageIcon(image);
+	private Dimension imageScaling; 
+	// Constructor
+	public ImagePanel(Dimension scalingSize) {
+		imageScaling = new Dimension((int) (scalingSize.width * 0.8889),
+				(int) (scalingSize.height * 0.6667));
+		icon = new ImageIcon(new BufferedImage(WebcamResolution.HD.getSize().width,
+				WebcamResolution.HD.getSize().height, BufferedImage.TRANSLUCENT));
 		label = new JLabel("", icon, JLabel.CENTER);
+		// Define the properties of this ImagePanel
 		this.setSize(icon.getIconWidth(), icon.getIconHeight());
 		this.setLayout(new BorderLayout());
 		this.add(label);
 	}
 
-	public void updateImage(BufferedImage image, Dimension programFrameSize) {
-		Dimension imageScaling = new Dimension((int) (programFrameSize.width * 0.8889),
-				(int) (programFrameSize.height * 0.6667));
+	// Updates the image displayed in this ImagePanel instance
+	public void setImage(BufferedImage image) {
+		// Remove the previous image
 		this.remove(label);
+		// Define and add the new image with the appropriate scaling
 		icon = new ImageIcon(
 				image.getScaledInstance(imageScaling.width, imageScaling.height, java.awt.Image.SCALE_SMOOTH));
 		label = new JLabel("", icon, JLabel.CENTER);
 		this.add(label);
+		this.validate();
 	}
 
 	@Override
-	public void resizeComponents(Dimension size) {
-		this.removeAll();
-		Dimension dim1 = new Dimension((int) (size.width * 0.8889), (int) (size.height * 0.6667));
-		Image img = icon.getImage();
-		Image newimg = img.getScaledInstance(dim1.width, dim1.height, java.awt.Image.SCALE_SMOOTH);
-		icon = new ImageIcon(newimg);
-		label = new JLabel("", icon, JLabel.CENTER);
-		this.setPreferredSize(dim1);
-		this.add(label);
+	public void resizeComponents(Dimension size) {		
+		imageScaling = new Dimension((int) (size.width * 0.8889),
+				(int) (size.height * 0.6667));
 	}
 }

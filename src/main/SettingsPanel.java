@@ -28,14 +28,10 @@ public class SettingsPanel extends JPanel implements Panel {
 
 	@Override
 	public void resizeComponents(Dimension size) {
-		this.removeAll();
 		Dimension dim1 = new Dimension((int) (size.width), (int) (size.height / 3.0));
 		operatorNamePanel.setPreferredSize(dim1);
 		workOrderPanel.setPreferredSize(dim1);
 		currentBoxIDPanel.setPreferredSize(dim1);
-		this.add(operatorNamePanel);
-		this.add(workOrderPanel);
-		this.add(currentBoxIDPanel);
 	}
 
 	public TextPanel getOperatorNamePanel() {

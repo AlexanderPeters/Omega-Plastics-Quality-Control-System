@@ -12,12 +12,10 @@ import java.awt.print.PrinterJob;
 import javax.print.PrintService;
 
 public class LabelWriter extends HelperFunctions {
-	private final String PRINTERNAME1 = "DYMO LabelWriter 450 Turbo";
-	private final String PRINTERNAME2 = "DYMO LabelWriter 450";
 	private Paper paper = new Paper();
 	private PrinterJob printerJob = PrinterJob.getPrinterJob();
 	private PageFormat pageFormat = printerJob.defaultPage();
-	private PrintService[] printService = PrinterJob.lookupPrintServices();
+	private PrintService[] printServices = PrinterJob.lookupPrintServices();
 
 	final double widthPaper = (1.125 * 72);
 	final double heightPaper = (3.5 * 72);
@@ -28,16 +26,21 @@ public class LabelWriter extends HelperFunctions {
 		pageFormat.setPaper(paper);
 		pageFormat.setOrientation(PageFormat.LANDSCAPE);
 
-		for (int i = 0; i < printService.length; i++) {
-			if (printService[i].getName().equals(PRINTERNAME1) || printService[i].getName().equals(PRINTERNAME2)) {
+		// Get printer names and add to dialog
+		String[] printerNames = new String[printServices.length];
+		for (int i = 0; i < printServices.length; i++)
+			printerNames[i] = printServices[i].getName();
+		
+		// Select print service from user selection
+		String selectedPrinter = new PrinterSelectionFrame(printerNames).getSelectedPrinter();
+		for (int i = 0; i < printServices.length; i++)
+			if (printServices[i].getName().equals(selectedPrinter))
 				try {
-					printerJob.setPrintService(printService[i]);
+					printerJob.setPrintService(printServices[i]);
 				} catch (PrinterException e) {
-					e.printStackTrace();
+					new ErrorFrame(e.getMessage());
 				}
-				break;
-			}
-		}
+
 	}
 
 	public void printLabel(String operatorName, String workOrder, String boxID, String date, int copies) {
@@ -50,19 +53,13 @@ public class LabelWriter extends HelperFunctions {
 
 					// Add Label Data
 					g.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-					String opName = operatorName;
-					if (opName.length() > 11)
-						opName = opName.substring(0, 11);
-					g.drawString("Operator: " + opName, 0, 17);
-					if (workOrder.length() != 6)
-						new Exception("Work Order is not the correct length.").printStackTrace();
+					g.drawString("Operator: " + operatorName.toUpperCase(), 0, 17);
 					try {
 						g.drawString("WO / BoxID: " + workOrder + " / " + boxID, 0, 34);
 					} catch (Exception e) {
-						e.printStackTrace();
+						new ErrorFrame(e.getMessage());
 					}
 					g.drawString("Date: " + date, 0, 51);
-
 					return PAGE_EXISTS;
 				} else {
 					return NO_SUCH_PAGE;
@@ -74,7 +71,8 @@ public class LabelWriter extends HelperFunctions {
 			printerJob.setCopies(copies);
 			printerJob.print();
 		} catch (PrinterException e) {
-			e.printStackTrace();
+			new ErrorFrame(e.getMessage());
 		}
+
 	}
 }

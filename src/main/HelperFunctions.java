@@ -1,14 +1,29 @@
 package main;
 
+// The library class which holds any
+// useful helper functions.
 public class HelperFunctions {
-	public static String fourDigitBoxIDConversion(String boxID) throws Exception {
-		if (Integer.parseInt(boxID) > 9999)
-			new Exception("boxID is not a four digit number.").printStackTrace();
-		else if (Integer.parseInt(boxID) < 0)
-			new Exception("boxID is negative.").printStackTrace();
+	// Converts a string of numbers to a string of numbers with enough preceding
+	// zeroes to become a number with four digits.
+	public static String fourDigitBoxIDConversion(String boxID) {
+		// Throw errors in number is out of bounds, otherwise convert.
+		if (!boxID.equals(null)) {
+			if (boxID.isEmpty()) {
+				new ErrorFrame("boxID is empty.");
+				boxID = null;
+			} else if (Integer.parseInt(boxID) > 9999) {
+				new ErrorFrame("boxID is too large, (>9999).");
+				boxID = null;
+			} else if (Integer.parseInt(boxID) < 0) {
+				new ErrorFrame("boxID is negative.");
+				boxID = null;
+			} else
+				while (boxID.length() < 4)
+					boxID = "0" + boxID;
+		} 
 		else
-			while (boxID.length() < 4)
-				boxID = "0" + boxID;
+			new ErrorFrame("Internal Error, BoxID == null");
+
 		return boxID;
 	}
 }
