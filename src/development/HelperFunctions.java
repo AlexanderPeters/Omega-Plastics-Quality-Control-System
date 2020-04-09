@@ -24,6 +24,6 @@ public class HelperFunctions {
 		else
 			new ErrorFrame("Internal Error, BoxID == null");
 
-		return boxID;
+		return String.valueOf(Integer.parseInt(boxID)); // Return any valid number with leading zeroes removed
 	}
 }
