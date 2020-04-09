@@ -24,7 +24,7 @@ public class Webcam_Capture extends HelperFunctions {
 	// Configure Data
 	private final String productionLocation = "O:\\QA Docs\\Amico\\QA Pictures\\";
 	private final String developmentLocation = "O:Automation Config Files\\QA Pictures\\developmentTesting";
-	private final boolean productionNotDeveloping = false;
+	private final boolean productionNotDeveloping = true;
 	private final String saveLocation = productionNotDeveloping ? productionLocation : developmentLocation;
 	private String workOrder;
 	private String operatorName;
