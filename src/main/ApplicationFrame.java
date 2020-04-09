@@ -7,11 +7,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
-
-import com.github.sarxos.webcam.WebcamResolution;
 
 public class ApplicationFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +19,6 @@ public class ApplicationFrame extends JFrame {
 	public ApplicationFrame() {
 		// Frame definition
 		this.setTitle("Basic Quality Inspection Program");
-		//this.setSize(JFrame.MAXIMIZED_BOTH);//750, 500);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		makeFrameFullSize(this);
 		this.setLayout(new BorderLayout());

@@ -1,11 +1,11 @@
 package main;
 
 public class Main {
-	static Webcam_Capture capture;
-	static ApplicationFrame applicationFrame = new ApplicationFrame();
+	public static Webcam_Capture capture;
+	public static ApplicationFrame applicationFrame;
 
-	
 	public static void main(String[] args) throws Exception {
+		applicationFrame = new ApplicationFrame();
 		capture = new Webcam_Capture();
 	}
 	

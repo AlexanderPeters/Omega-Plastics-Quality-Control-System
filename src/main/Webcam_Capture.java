@@ -32,7 +32,6 @@ public class Webcam_Capture extends HelperFunctions {
 	private ContentContainerPanel ccp = Main.applicationFrame.getContentContainer();
 	private SettingsPanel settingsPanel = ccp.getSettingsPanel();
 	
-	private Thread WebcamThread;
 	private Thread UIThread;
 
 	public Webcam_Capture() throws Exception {
@@ -52,51 +51,23 @@ public class Webcam_Capture extends HelperFunctions {
 
 		settingsPanel.getCurrentBoxIDPanel().setText("0");
 		
-		// Image server thread
-	/*	WebcamThread = new Thread(() -> {
-			int i = 0;
-			while(true) {
-				setImage(webcam.getImage());
-				i++;
-				System.out.println(i);
-			}
-		});
-		WebcamThread.start();
-*/
 		// UI updating thread
 		UIThread = new Thread(() -> {
-			//int i = 0;
 			while(true) {
 				ccp = Main.applicationFrame.getContentContainer();
 				settingsPanel = ccp.getSettingsPanel();
 				workOrder = settingsPanel.getWorkOrderPanel().getText();
 				operatorName = settingsPanel.getOperatorNamePanel().getText();
 				currentBoxID = settingsPanel.getCurrentBoxIDPanel().getText();
-				
-				//setImage(webcam.getImage());
-				
+								
 				BufferedImage im;
 				if((im = webcam.getImage()) != null) {
-					ccp.getImagePanel().setImage(im);//getImage());
+					ccp.getImagePanel().setImage(im);
 					Main.applicationFrame.setContentPane(ccp);
-					//i++;
-					//System.out.println(i);
 				}
 			}
 		});
 		UIThread.start();
-	}
-	
-	private void setImage(BufferedImage image) {
-		synchronized(this) {
-			this.image = image;
-		}
-	}
-	
-	private BufferedImage getImage() {
-		synchronized(this) {
-			return this.image;
-		}
 	}
 
 	public void closeWebcam() {
@@ -106,7 +77,6 @@ public class Webcam_Capture extends HelperFunctions {
 	}
 	
 	public void closeThreads() {
-		//WebcamThread.stop();
 		UIThread.stop();
 	}
 

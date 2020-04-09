@@ -2,7 +2,6 @@ package main;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -26,13 +25,6 @@ public class ContentContainerPanel extends JPanel implements Panel {
 		settingsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(settingsPanel);
 	}
-
-	/*
-	public void updateImagePanel(BufferedImage image, Dimension programFrameSize) {
-		if(image != null)
-			imagePanel.updateImage(image);
-		this.validate();
-	}*/
 
 	@Override
 	public void resizeComponents(Dimension size) {

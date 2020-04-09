@@ -17,6 +17,7 @@ public class ImagePanel extends JPanel implements Panel {
 	private ImageIcon icon;
 	private JLabel label;
 	private Dimension imageScaling; 
+	
 	// Constructor
 	public ImagePanel(Dimension scalingSize) {
 		imageScaling = new Dimension((int) (scalingSize.width * 0.8889),
