@@ -60,11 +60,8 @@ public class Webcam_Capture extends HelperFunctions {
 				operatorName = settingsPanel.getOperatorNamePanel().getText();
 				currentBoxID = settingsPanel.getCurrentBoxIDPanel().getText();
 								
-				BufferedImage im;
-				if((im = webcam.getImage()) != null) {
-					ccp.getImagePanel().setImage(im);
-					Main.applicationFrame.setContentPane(ccp);
-				}
+				if((image = webcam.getImage()) != null)
+					ccp.getImagePanel().setImage(image);
 			}
 		});
 		UIThread.start();
@@ -97,7 +94,8 @@ public class Webcam_Capture extends HelperFunctions {
 		}
 
 		// Check and format work order
-		if (workOrder.equals(null) || workOrder.length() != 6 || !workOrder.matches("-?\\d+(\\.\\d+)?")) {
+		if (workOrder.equals(null) || workOrder.length() != 6 || !workOrder.matches("-?\\d+(\\.\\d+)?") 
+				|| Double.parseDouble(workOrder) < 0) {
 			new ErrorFrame("The Work Order was not formatted correctly.");
 			dataFormattedCorrectly = false;
 		}
