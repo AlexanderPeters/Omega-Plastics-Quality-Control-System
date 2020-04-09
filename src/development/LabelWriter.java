@@ -43,6 +43,7 @@ public class LabelWriter extends HelperFunctions {
 
 	}
 
+	// Print the label with the desired formating and required number of copies
 	public void printLabel(String operatorName, String workOrder, String boxID, String date, int copies) {
 		printerJob.setPrintable(new Printable() {
 			@Override

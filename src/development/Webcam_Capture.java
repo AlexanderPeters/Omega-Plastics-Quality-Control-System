@@ -85,7 +85,7 @@ public class Webcam_Capture extends HelperFunctions {
 		boolean dataFormattedCorrectly = true;
 
 		// Check and format operator name
-		if (operatorName.equals(null) || operatorName.isEmpty() || !operatorName.matches("^[a-zA-Z]*$")) {
+		if (operatorName.equals(null) || operatorName.isEmpty() || !operatorName.matches("^[a-zA-Z]*$") || operatorName.length() < 2) {
 			new ErrorFrame("The Operator Name was not formatted correctly.");
 			dataFormattedCorrectly = false;
 		} else {

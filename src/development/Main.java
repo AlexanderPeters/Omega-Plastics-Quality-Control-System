@@ -1,8 +1,8 @@
 package development;
 
 public class Main {
-	public static Webcam_Capture capture;
-	public static ApplicationFrame applicationFrame;
+	public static Webcam_Capture capture; // "Main code"
+	public static ApplicationFrame applicationFrame; // Main GUI JFrame
 
 	public static void main(String[] args) throws Exception {
 		applicationFrame = new ApplicationFrame();

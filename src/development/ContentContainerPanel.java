@@ -19,18 +19,18 @@ public class ContentContainerPanel extends JPanel implements Panel {
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		imagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(imagePanel);
+		this.add(imagePanel); // Top of frame
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(buttonPanel);
+		this.add(buttonPanel); // Middle of frame
 		settingsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(settingsPanel);
+		this.add(settingsPanel); // Bottom of frame
 	}
 
 	@Override
 	public void resizeComponents(Dimension size) {
-		imagePanel.resizeComponents(size);
-		buttonPanel.resizeComponents(size);
-		settingsPanel.resizeComponents(size);
+		imagePanel.resizeComponents(size); 
+		buttonPanel.resizeComponents(size); 
+		settingsPanel.resizeComponents(size); 
 	}
 	
 	public ImagePanel getImagePanel() {
