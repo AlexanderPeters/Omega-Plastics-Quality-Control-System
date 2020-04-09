@@ -1,4 +1,4 @@
-package main;
+package development;
 
 public class Main {
 	public static Webcam_Capture capture;
