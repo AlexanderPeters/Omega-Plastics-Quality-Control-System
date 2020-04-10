@@ -2,7 +2,6 @@ package production;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -13,46 +12,36 @@ public class ContentContainerPanel extends JPanel implements Panel {
 	private ButtonPanel buttonPanel;
 	private SettingsPanel settingsPanel;
 
-	public ContentContainerPanel(BufferedImage image) {
-		imagePanel = new ImagePanel(image);
+	public ContentContainerPanel(Dimension scalingSize) {
+		imagePanel = new ImagePanel(scalingSize);
 		buttonPanel = new ButtonPanel();
 		settingsPanel = new SettingsPanel();
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		imagePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(imagePanel);
+		this.add(imagePanel); // Top of frame
 		buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(buttonPanel);
+		this.add(buttonPanel); // Middle of frame
 		settingsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(settingsPanel);
-	}
-
-	public void updateImagePanel(BufferedImage image, Dimension programFrameSize) {
-		this.removeAll();
-		imagePanel.updateImage(image, programFrameSize);
-		addComponents();
+		this.add(settingsPanel); // Bottom of frame
 	}
 
 	@Override
 	public void resizeComponents(Dimension size) {
-		this.removeAll();
-		imagePanel.resizeComponents(size);
-		buttonPanel.resizeComponents(size);
-		settingsPanel.resizeComponents(size);
-		addComponents();
+		imagePanel.resizeComponents(size); 
+		buttonPanel.resizeComponents(size); 
+		settingsPanel.resizeComponents(size); 
 	}
-
-	private void addComponents() {
-		this.add(imagePanel);
-		this.add(buttonPanel);
-		this.add(settingsPanel);
+	
+	public ImagePanel getImagePanel() {
+		return imagePanel;
 	}
 
 	public ButtonPanel getButtonPanel() {
-		return this.buttonPanel;
+		return buttonPanel;
 	}
 
 	public SettingsPanel getSettingsPanel() {
-		return this.settingsPanel;
+		return settingsPanel;
 	}
 }

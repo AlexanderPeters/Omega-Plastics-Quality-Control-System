@@ -2,6 +2,7 @@ package production;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -19,12 +20,12 @@ public class ApplicationFrame extends JFrame {
 	public ApplicationFrame(BufferedImage image) {
 		// Frame definition
 		this.setTitle("Basic Quality Inspection Program");
-		this.setSize(750, 500);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		makeFrameFullSize(this);
 		this.setLayout(new BorderLayout());
-
+				
 		// Add content container to frame and make visible
-		contentContainerPanel = new ContentContainerPanel(image);
+		contentContainerPanel = new ContentContainerPanel(this.getSize());
 		this.add(contentContainerPanel);
 		this.setVisible(true);
 		this.addWindowListener(new WindowAdapter() {
@@ -48,22 +49,23 @@ public class ApplicationFrame extends JFrame {
 	private void resizeFrame() {
 		Dimension newSize = this.getSize();
 		if ((newSize.width != oldFrameSize.width) || (newSize.height != oldFrameSize.height)) {
-			this.remove(contentContainerPanel);
 			contentContainerPanel.resizeComponents(newSize);
-			this.add(contentContainerPanel);
 			this.validate();
 		}
 		oldFrameSize = newSize;
 	}
 
 	public void updateFrame(ContentContainerPanel ccp) {
-		this.remove(contentContainerPanel);
-		this.contentContainerPanel = ccp;
-		this.add(contentContainerPanel);
+		contentContainerPanel = ccp;
 		this.validate();
 	}
 
 	public Dimension getFrameSize() {
 		return this.getSize();
+	}
+	
+	private void makeFrameFullSize(JFrame aFrame) {
+	    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    aFrame.setSize(screenSize.width, screenSize.height);
 	}
 }
