@@ -1,5 +1,11 @@
 package production;
 
+/**
+* @author  Alexander Peters
+* @version 3.0
+* @since   2020-04-10
+*/
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

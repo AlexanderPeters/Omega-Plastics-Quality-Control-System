@@ -1,5 +1,11 @@
 package production;
 
+/**
+* @author  Alexander Peters
+* @version 3.0
+* @since   2020-04-10
+*/
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 

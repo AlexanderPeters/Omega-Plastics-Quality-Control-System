@@ -1,5 +1,11 @@
 package production;
 
+/**
+* @author  Alexander Peters
+* @version 3.0
+* @since   2020-04-10
+*/
+
 // The library class which holds any
 // useful helper functions.
 public class HelperFunctions {
